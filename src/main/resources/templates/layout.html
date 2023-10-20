@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ecommerce</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+
+<!--NAV-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container px-5">
+        <a class="navbar-brand" th:href="@{/}">Donut Factory</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li sec:authorize="!hasRole('ROLE_STAFF')" class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+                <li sec:authorize="!hasRole('ROLE_STAFF')" class="nav-item"><a class="nav-link" th:href="@{/menu}">Menu</a></li>
+                <li sec:authorize="hasRole('ROLE_USER')" class="nav-item"><a class="nav-link" th:href="@{/cart}">MyCart</a></li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/login}">Login</a></li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/register}">Register</a></li>
+                <li sec:authorize="hasRole('ROLE_USER')"  class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownBlog4" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                        <li ><a class="dropdown-item" th:href="@{/profile}">My Profile</a></li>
+                        <li ><a class="dropdown-item" th:href="@{/orders}">My Orders</a></li>
+                    </ul>
+                </li>
+                <li sec:authorize="hasRole('ROLE_CASHIER')" class="nav-item"><a class="nav-link" th:href="@{/cashier}">Cashier</a></li>
+                <li sec:authorize="hasRole('ROLE_DELIVERY')" class="nav-item"><a class="nav-link" th:href="@{/all/delivering/orders}">Orders for Delivering</a></li>
+                <li sec:authorize="hasRole('ROLE_KITCHEN_STAFF')" class="nav-item"><a class="nav-link" th:href="@{/all/orders}">View Orders</a></li>
+                <li sec:authorize="hasRole('ROLE_ADMIN')"  class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownBlog2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                        <li ><a class="dropdown-item" th:href="@{/staff/manager}">View Staff</a></li>
+                        <li ><a class="dropdown-item" th:href="@{/user/manager}">View Users</a></li>
+                        <li ><a class="dropdown-item" th:href="@{/create/product}">Create a Product</a></li>
+                    </ul>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- BODY -->
+<body layout:fragment="body">
+
+</body>
+
+<!--FOOTER-->
+<!--<footer class="bg-dark py-4 mt-auto">-->
+<!--    <div class="container px-5">-->
+<!--        <div class="row align-items-center justify-content-between flex-column flex-sm-row">-->
+<!--            <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; Donuts Ecommerce by Filip Petkovski 2023</div></div>-->
+<!--            <div class="col-auto">-->
+<!--                <a class="link-light small" href="#!">Privacy</a>-->
+<!--                <span class="text-white mx-1">&middot;</span>-->
+<!--                <a class="link-light small" href="#!">Terms</a>-->
+<!--                <span class="text-white mx-1">&middot;</span>-->
+<!--                <a class="link-light small" href="#!">Contact</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</footer>-->
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+</html>

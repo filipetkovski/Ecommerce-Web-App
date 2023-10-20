@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="eu" xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('.removeBtn').click(function () {
+        var cartId = $(this).val();
+        if (cartId != null) {
+          $.ajax({
+            type: 'GET',
+            url: '/cart/' + cartId + '/remove',
+            success: function () {
+              location.reload();
+            },
+            error: function (xhr, status, error) {
+              console.error(error);
+            }
+          });
+        }
+      });
+    });
+
+    $(document).ready(function () {
+      $('.orderBtn').click(function () {
+        var cartId = $(this).val();
+        var price = document.getElementById("quantity").textContent;
+        if(parseInt(price) > 0) {
+          if (cartId != null) {
+            console.log(cartId);
+            $.ajax({
+              type: 'GET',
+              url: '/order/' + cartId,
+              success: function () {
+                document.getElementById("quantity").innerText = "0.00";
+                document.getElementById("quantity2").innerText = "0.00";
+                document.getElementById("emptyDiv").remove();
+                document.getElementById("alertCart2").style.display = "block";
+                setTimeout(hideCartNotification, 10000);
+              },
+              error: function (xhr, status, error) {
+                console.error(error);
+              }
+            });
+          }
+        } else {
+          document.getElementById("alertCart3").style.display = "block";
+          setTimeout(hideCartNotification2, 10000);
+        }
+      });
+    });
+
+    function hideCartNotification() {
+      document.getElementById("alertCart2").style.display = "none";
+    }
+
+    function hideCartNotification2() {
+      document.getElementById("alertCart3").style.display = "none";
+    }
+  </script>
+  <style>
+    #divRemove {
+      padding: 2px;
+      background-color: white;
+      border-radius: 5px;
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+<section layout:fragment="body">
+  <div class="container" sec:authorize="!isAuthenticated()">
+    <div class="alert alert-success">
+      You do not have permission to use cart!
+    </div>
+  </div>
+  <div sec:authorize="isAuthenticated()" class="container px-3 my-5">
+    <div class="text-center mb-4">
+      <h1 class="fw-bolder">My Cart</h1>
+    </div>
+    <div>
+      <div class="text-center">
+        <div>
+          <h6 class="text-uppercase">Subtotal: $
+            <span th:text="${total}" id="quantity2">€ 132.00</span></h6>
+        </div>
+        <div>
+          <h6 class="text-uppercase mb-3">Delivery: FREE</h6>
+        </div>
+        <hr class="my-1">
+        <div>
+          <h5 class="text-uppercase">Total: $
+            <span th:text="${total}" id="quantity">€ 132.00</span></h5>
+        </div>
+        <button class="btn btn-dark orderBtn" th:value="${cartId}">Order Now</button>
+      </div>
+    </div>
+
+    <section id="section" class="">
+      <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 justify-content-center" id="emptyDiv">
+          <div th:each="addProduct :${addProducts}" class="col mb-5">
+            <div class="card h-100">
+              <div class="ratio ratio-1x1">
+                <img class="card-img-top" th:src="${addProduct.product.photoUrl}" alt="Product Image" />
+              </div>
+              <div class="card-body p-4">
+                <div class="text-center">
+                  <h5 class="fw-bolder" th:text="${addProduct.product.name}">Product Name</h5>
+                  <h5 class="card-text">Price: $
+                    <span th:text="${addProduct.product.price}">5.00</span>
+                  </h5>
+                  <h6 class="card-text">Quantity:
+                    <span th:text="${addProduct.quantity_needed}">5.00</span>
+                  </h6>
+                </div>
+              </div>
+              <div class="text-center" id="divRemove"><button class="addCartBtn btn btn-close removeBtn" th:value="${addProduct.Id}"></button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="container mt-4">
+      <div class="alert alert-success" id="alertCart2" style="display: none;">
+        Your order is successfuly completed.
+      </div>
+    </div>
+
+    <div class="container mt-4">
+      <div class="alert alert-success" id="alertCart3" style="display: none;">
+        You can't make an empty order!
+      </div>
+    </div>
+
+    <div class="container mt-4" th:if="${empty}">
+      <div class="alert alert-success" id="alertCart" >
+        Your cart is empty!
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+</html>

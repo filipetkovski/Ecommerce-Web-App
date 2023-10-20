@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.addCartBtn').click(function () {
+                var productId = $(this).val();
+                var quantity = $('#inputQuantity').val();
+                var product_quantity = $('#quantity').text();
+                if(product_quantity-quantity >= 0) {
+                    if (productId != null) {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/cart/add/' + productId + '/' + quantity,
+                            success: function () {
+                                document.getElementById("quantity").innerText = product_quantity-quantity + "";
+                                document.getElementById("alertCart").style.display = "block";
+                                setTimeout(hideCartNotification, 10000);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    }
+                } else {
+                    document.getElementById("alertCart2").style.display = "block";
+                    setTimeout(hideCartNotification2, 10000);
+                }
+            });
+        });
+
+        function hideCartNotification() {
+            document.getElementById("alertCart").style.display = "none";
+        }
+
+        function hideCartNotification2() {
+            document.getElementById("alertCart2").style.display = "none";
+        }
+
+    </script>
+</head>
+<body>
+
+<section layout:fragment="body">
+    <div class="container px-5 my-5">
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div th:object="${product}" class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" th:src="*{photoUrl}" alt="..." /></div>
+                    <div class="col-md-6">
+                        <p class="mb-0 fw-light">
+                            <span id="quantity" th:text="*{quantity}">40.00</span> Left
+                        </p>
+                        <p class="mb-0 fw-light" th:text="*{code}"></p>
+                        <h1 class="display-5 fw-bolder" th:text="*{name}">Product Name</h1>
+                        <p class="fw-normal" th:text="*{description}">Description</p>
+                        <div class="fs-5 mb-3">Price: $
+                            <span th:text="*{price}">40.00</span>
+                        </div>
+                        <div class="d-flex mb-2" sec:authorize="isAuthenticated()">
+                            <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                            <button class="btn btn-outline-dark flex-shrink-0 addCartBtn" th:value="*{Id}" type="button">
+                                <i class="bi-cart-fill me-1"></i>
+                                Add to cart
+                            </button>
+                        </div>
+                        <div class="d-flex mb-2" sec:authorize="!isAuthenticated()">
+                            <a class="btn btn-outline-dark flex-shrink-0 me-3" th:href="@{/login}" type="button">
+                                <i class="bi-cart-fill me-1"></i>
+                                Login
+                            </a>
+                            <a class="btn btn-outline-dark flex-shrink-0" th:href="@{/register}"  type="button">
+                                <i class="bi-cart-fill me-1"></i>
+                                Register
+                            </a>
+                        </div>
+                        <div class="d-flex">
+                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-outline-warning flex-shrink- me-3" th:href="@{/menu/{productId}/edit(productId=${product.Id})}">Edit</a>
+<!--                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-outline-warning flex-shrink-" th:href="@{/menu/{productId}/delete(productId=${product.Id})}">Delete</a>-->
+                        </div>
+                        <div class="d-flex mt-4">
+                            <div class="alert alert-success" id="alertCart" style="display: none;">
+                                Successfuly added to cart.
+                            </div>
+                        </div>
+                        <div class="container mt-4">
+                            <div class="alert alert-success" id="alertCart2" style="display: none;">
+                                The quantity you enter is bigger then the quantity of the donuts that are left!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+
+</body>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>

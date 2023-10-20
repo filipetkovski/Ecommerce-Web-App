@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<section layout:fragment="body">
+    <div class="container" sec:authorize="!hasRole('ROLE_ADMIN')">
+        <div class="alert alert-success">
+            You do not have permission to create a product!
+        </div>
+    </div>
+    <form sec:authorize="hasRole('ROLE_ADMIN')" id="form" role="form" method="post" th:action="@{/create/product}" th:object="${product}" class="p-5">
+        <div class="form-row col-md-6 mb-2">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Name..." th:field="*{name}" name="name">
+        </div>
+        <div class="form-group col-md-6 mb-2">
+            <label for="category">Category</label>
+            <select class="form-control" id="category" placeholder="Category..." th:field="*{category}" name="category" >
+                <option name="Donuts" value="Donuts"  selected="true">Donuts</option>
+                <option name="Drinks" value="Drinks">Drinks</option>
+                <option name="Coffee" value="Coffee">Coffee</option>
+            </select>
+        </div>
+        <div class="form-row col-md-6 mb-2">
+            <label for="description">Description</label>
+            <textarea class="form-control" maxlength="255" id="description" placeholder="Description..." th:field="*{description}" name="description"></textarea>
+        </div>
+        <div class="form-group col-md-6 mb-2">
+            <label for="price">Price</label>
+            <input type="number"  step='0.01' value='0.00' class="form-control" id="price" th:field="*{price}" name="price">
+        </div>
+        <div class="form-group col-md-6 mb-2">
+            <label for="quantity">Quantity</label>
+            <input type="number" value='1' class="form-control" id="quantity" th:field="*{quantity}" name="quantity">
+        </div>
+        <div class="form-row col-md-6 mb-2">
+            <label for="photoUrl">Photo URL</label>
+            <input type="text" class="form-control" id="photoUrl" placeholder="Photo URL..." th:field="*{photoUrl}" name="photoUrl">
+        </div>
+        <button type="submit" class="btn btn-outline-dark">Submit</button>
+    </form>
+</section>
+
+</body>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <style>
+        #imgHover:hover {
+            border-radius:10px;
+            border: 1px solid transparent;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+
+<section layout:fragment="body">
+    <div class="container px-5 my-5">
+        <div class="text-center mb-5">
+            <h1 class="fw-bolder" th:text="${category}">Donuts</h1>
+            <p class="lead fw-normal text-muted mb-0" th:text="${category_text}">Sweet life</p>
+        </div>
+
+        <section class="">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    <div th:each="product :${products}" class="col mb-5">
+                        <div class="card h-100">
+                            <a id="imgHover" th:href="@{/product/view/{productId}(productId=${product.Id})}">
+                                <div class="ratio ratio-1x1">
+                                    <img class="card-img-top" th:src="${product.photoUrl}" alt="Product Image" />
+                                </div>
+                            </a>
+                            <div class="card-body p-4">
+                                <div class="">
+                                    <h4 class="fw-bold" th:text="${product.name}">Product Name</h4>
+                                    <h5 class="card-text">Price: $
+                                        <span th:text="${product.price}">5.00</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+
+</body>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+</html>
