@@ -37,7 +37,7 @@ public class CartServiceImpl implements CartService {
     public void save(UserEntity user, ProductDto productDto, Integer quantity) {
         Cart cart = user.getCart();
         List<AddProduct> products = cart.getCartProducts();
-        AddProduct hasAddProduct = products.stream().filter((product) -> product.getProduct().getId() == mapToProduct(productDto).getId()).findFirst().orElse(null);
+        AddProduct hasAddProduct = products.stream().filter((product) -> product.getProduct().getId().equals(mapToProduct(productDto).getId())).findFirst().orElse(null);
         if(hasAddProduct != null) {
             hasAddProduct.setQuantity_needed(hasAddProduct.getQuantity_needed()+quantity);
             addProductRepository.save(hasAddProduct);

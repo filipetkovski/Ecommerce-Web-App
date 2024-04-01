@@ -1,7 +1,6 @@
 package com.example.ecommerce.dto;
 
 import com.example.ecommerce.entity.AddProduct;
-import com.example.ecommerce.entity.Order;
 import com.example.ecommerce.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,27 +1,23 @@
 package com.example.ecommerce.service.impl;
 
 import com.example.ecommerce.dto.RegistrationDto;
-import com.example.ecommerce.entity.Cart;
 import com.example.ecommerce.entity.Role;
 import com.example.ecommerce.entity.UserEntity;
 import com.example.ecommerce.repository.RoleRepository;
 import com.example.ecommerce.repository.UserRepository;
-import com.example.ecommerce.service.CartService;
 import com.example.ecommerce.service.UserService;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -38,7 +34,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setAddress(registrationDto.getAddress());
         userEntity.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
         Role role = roleRepository.findByName("ROLE_USER");
-        userEntity.setRoles(Arrays.asList(role));
+        userEntity.setRoles(Collections.singletonList(role));
         userRepository.save(userEntity);
         return userEntity;
     }
@@ -63,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long userId) {
         UserEntity user = userRepository.getById(userId);
-        Role role = roleRepository.getReferenceById(Long.valueOf(1));
+        Role role = roleRepository.getReferenceById(1L);
         user.getRoles().remove(role);
         userRepository.deleteById(userId);
     }
@@ -78,7 +74,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setAddress(registrationDto.getAddress());
         userEntity.setPhoneNumber(registrationDto.getPhoneNumber());
         Role role = roleRepository.findByName("ROLE_USER");
-        userEntity.setRoles(Arrays.asList(role));
+        userEntity.setRoles(Collections.singletonList(role));
         userRepository.save(userEntity);
     }
 
@@ -89,22 +85,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUser(List<Role> roles) {
-        return roles.stream().filter((role) -> role.getName().equals("ROLE_USER")).collect(Collectors.toList()).isEmpty();
+        return roles.stream().noneMatch((role) -> role.getName().equals("ROLE_USER"));
     }
 
     @Override
     public boolean isKitchenStaff(List<Role> roles) {
-        return roles.stream().filter((role) -> role.getName().equals("ROLE_KITCHEN_STAFF")).collect(Collectors.toList()).isEmpty();
+        return roles.stream().noneMatch((role) -> role.getName().equals("ROLE_KITCHEN_STAFF"));
     }
 
     @Override
     public boolean isCashier(List<Role> roles) {
-        return roles.stream().filter((role) -> role.getName().equals("ROLE_CASHIER")).collect(Collectors.toList()).isEmpty();
+        return roles.stream().noneMatch((role) -> role.getName().equals("ROLE_CASHIER"));
     }
 
     @Override
     public boolean isDelivery(List<Role> roles) {
-        return roles.stream().filter((role) -> role.getName().equals("ROLE_DELIVERY")).collect(Collectors.toList()).isEmpty();
+        return roles.stream().noneMatch((role) -> role.getName().equals("ROLE_DELIVERY"));
     }
 
     @Override

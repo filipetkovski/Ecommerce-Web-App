@@ -24,5 +24,8 @@ public class Cart {
     @JoinColumn(name = "created_by")
     private UserEntity createdBy = null;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "cart_products",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "addproduct_id"))
     private List<AddProduct> cartProducts = new ArrayList<>();
 }

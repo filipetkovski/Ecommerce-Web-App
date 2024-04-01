@@ -1,22 +1,16 @@
 package com.example.ecommerce.service.impl;
 
-import com.example.ecommerce.dto.CartDto;
 import com.example.ecommerce.dto.OrderDto;
 import com.example.ecommerce.entity.*;
 import com.example.ecommerce.mapper.OrderMapper;
-import com.example.ecommerce.repository.AddProductRepository;
 import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.service.OrderService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.ecommerce.mapper.CartMapper.mapToCartDto;
 import static com.example.ecommerce.mapper.OrderMapper.mapToOrderDto;
 
 @Service
@@ -32,17 +26,19 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setOrderProducts(addProducts);
         order.setPrice(price);
-        List<Role> roles = user.getRoles().stream().filter((role) -> role.getName().equals("ROLE_CASHIER")).collect(Collectors.toList());
+        List<Role> roles = user.getRoles().stream().filter((role) -> role.getName().equals("ROLE_CASHIER")).toList();
         if(!roles.isEmpty()) {
-            order.setStatus("HERE");
+            order.setStatus(Status.HERE);
+        } else {
+            order.setStatus(Status.WAITING);
         }
         order.setCreatedBy(user);
         LocalDateTime date = LocalDateTime.now();
-        String code = date.getSecond() + "" + date.getMinute() + "" + date.getHour() + "" + date.getDayOfMonth() + "" + date.getMonthValue() + "" + date.getYear();
+        StringBuilder code = new StringBuilder(date.getSecond() + "" + date.getMinute() + "" + date.getHour() + "" + date.getDayOfMonth() + "" + date.getMonthValue() + "" + date.getYear());
         while(code.length() < 14) {
-            code += "0";
+            code.append("0");
         }
-        order.setCode(code);
+        order.setCode(code.toString());
         orderRepository.save(order);
     }
 
@@ -51,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
         if(!user.getOrders().isEmpty()) {
             List<Order> orders = user.getOrders();
             if(orders != null)
-                return orders.stream().map((order) -> mapToOrderDto(order)).collect(Collectors.toList());
+                return orders.stream().map(OrderMapper::mapToOrderDto).collect(Collectors.toList());
         }
         return null;
     }
@@ -59,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getWaitingOrders() {
         List<Order> orders = orderRepository.findAll();
-        return orders.stream().map((order) -> mapToOrderDto(order)).filter(orderDto -> orderDto.getStatus().equals("WAITING...") || orderDto.getStatus().equals("HERE")).collect(Collectors.toList());
+        return orders.stream().map(OrderMapper::mapToOrderDto).filter(orderDto -> orderDto.getStatus().equals(Status.WAITING) || orderDto.getStatus().equals(Status.HERE)).collect(Collectors.toList());
     }
 
     @Override
@@ -75,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void markAsDone(Long orderId) {
         Order order = orderRepository.getById(orderId);
-        order.setStatus("DELIVERED");
+        order.setStatus(Status.DELIVERED);
         orderRepository.save(order);
     }
 
@@ -87,13 +83,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void markAsDelivering(Long orderId) {
         Order order = orderRepository.getById(orderId);
-        order.setStatus("DELIVERING");
+        order.setStatus(Status.DELIVERING);
         orderRepository.save(order);
     }
 
     @Override
     public List<OrderDto> getDeliveringOrders() {
         List<Order> orders = orderRepository.findAll();
-        return orders.stream().map((order) -> mapToOrderDto(order)).filter(orderDto -> orderDto.getStatus().equals("DELIVERING")).collect(Collectors.toList());
+        return orders.stream().map(OrderMapper::mapToOrderDto).filter(orderDto -> orderDto.getStatus().equals(Status.DELIVERING)).collect(Collectors.toList());
     }
 }

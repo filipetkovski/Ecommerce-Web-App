@@ -29,7 +29,7 @@
                 <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     <div th:each="product :${products}" class="col mb-5">
                         <div class="card h-100">
-                            <a id="imgHover" th:href="@{/product/view/{productId}(productId=${product.Id})}">
+                            <a th:href="@{/product/view/{productId}(productId=${product.Id})}">
                                 <div class="ratio ratio-1x1">
                                     <img class="card-img-top" th:src="${product.photoUrl}" alt="Product Image" />
                                 </div>

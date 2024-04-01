@@ -1,21 +1,18 @@
 package com.example.ecommerce.controller;
 
-import com.example.ecommerce.entity.Role;
 import com.example.ecommerce.entity.UserEntity;
 import com.example.ecommerce.repository.UserRepository;
 import com.example.ecommerce.security.SecurityUtil;
 import com.example.ecommerce.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 @Controller
 public class GeneralController {
-    UserRepository userRepository;
-    UserService userService;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     public GeneralController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;

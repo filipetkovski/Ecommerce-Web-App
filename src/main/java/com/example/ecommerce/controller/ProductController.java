@@ -1,15 +1,12 @@
 package com.example.ecommerce.controller;
 
 import com.example.ecommerce.dto.ProductDto;
-import com.example.ecommerce.entity.Order;
 import com.example.ecommerce.service.ProductService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -102,24 +99,22 @@ public class ProductController {
         return "cashier_page";
     }
 
-//    @PostMapping("/cart/find")
-//    @ResponseBody
-//    public ResponseEntity<?> findProduct(@RequestParam String code) {
-//        try {
-//            ProductDto productDto = productService.findByName(code);
-//            if (productDto == null) {
-//                return ResponseEntity.ok("NotFound");
-//            }
-//            return ResponseEntity.ok(productDto);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("An error occurred: " + e.getMessage());
-//        }
-//    }
 
     @GetMapping("/cart/find/{productName}")
     public String getProuctView(@PathVariable("productName") String productName) {
         ProductDto productDto = productService.findByName(productName);
         return "redirect:/product/view/" + productDto.getId();
+    }
+
+    @PostMapping("/product/find")
+    public String findProduct(@RequestParam("search") String searchValue) {
+        return "redirect:/product/result?product=" + searchValue;
+    }
+
+    @GetMapping("/product/result")
+    public String renderProductSerach(Model model, @RequestParam String searchValue) {
+        List<ProductDto> productDtos = productService.findBySearch(searchValue);
+        model.addAttribute("products", productDtos);
+        return "cashier_page";
     }
 }

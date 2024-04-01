@@ -28,18 +28,18 @@
             <h5 class="card-text">Status:
                 <span th:text="${order.status}"></span>
             </h5>
-            <h5 class="card-text">Address:
+            <h5 class="card-text" th:if="${order.createdBy.address} != HERE">Address:
                 <span th:text="${order.createdBy.address}"></span>
             </h5>
-            <h5 class="card-text">Phone Number:
+            <h5 class="card-text" th:if="${order.createdBy.phoneNumber} != 078555666">Phone Number:
                 <span th:text="${order.createdBy.phoneNumber}"></span>
             </h5>
             <h5 class="card-text">Total: $
                 <span th:text="${order.price}"></span>
             </h5>
-            <a th:if="${order.Status} == WAITING... " sec:authorize="hasRole('ROLE_KITCHEN_STAFF')" class="btn btn-outline-dark" th:href="@{/order/{orderId}/delivering(orderId=${order.Id})}">Send to Delivery</a>
-            <a th:if="${order.Status} == DELIVERING " sec:authorize="hasRole('ROLE_DELIVERY')" class="btn btn-outline-dark" th:href="@{/order/{orderId}/done(orderId=${order.Id})}">Deliverd</a>
-            <a th:if="${order.Status} == HERE " sec:authorize="hasRole('ROLE_KITCHEN_STAFF')" class="btn btn-outline-dark" th:href="@{/order/{orderId}/done(orderId=${order.Id})}">Done</a>
+            <a th:if="${status} == WAITING" sec:authorize="hasRole('ROLE_KITCHEN_STAFF')" class="btn btn-outline-dark" th:href="@{/order/{orderId}/delivering(orderId=${order.Id})}">Send to Delivery</a>
+            <a th:if="${status} == DELIVERING" sec:authorize="hasRole('ROLE_DELIVERY')" class="btn btn-outline-dark" th:href="@{/order/{orderId}/delivered(orderId=${order.Id})}">Deliverd</a>
+            <a th:if="${status} == HERE" sec:authorize="hasRole('ROLE_KITCHEN_STAFF')" class="btn btn-outline-dark" th:href="@{/order/{orderId}/done(orderId=${order.Id})}">Done</a>
         </div>
 
         <section id="section" class="">

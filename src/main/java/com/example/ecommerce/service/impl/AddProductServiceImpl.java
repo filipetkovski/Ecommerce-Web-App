@@ -1,7 +1,6 @@
 package com.example.ecommerce.service.impl;
 
 import com.example.ecommerce.dto.AddProductDto;
-import com.example.ecommerce.entity.AddProduct;
 import com.example.ecommerce.repository.AddProductRepository;
 import com.example.ecommerce.service.AddProductService;
 import org.springframework.stereotype.Service;

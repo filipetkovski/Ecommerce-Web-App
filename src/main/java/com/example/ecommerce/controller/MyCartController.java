@@ -4,6 +4,7 @@ import com.example.ecommerce.dto.AddProductDto;
 import com.example.ecommerce.dto.CartDto;
 import com.example.ecommerce.dto.ProductDto;
 import com.example.ecommerce.entity.UserEntity;
+import com.example.ecommerce.mapper.AddProductMapper;
 import com.example.ecommerce.repository.UserRepository;
 import com.example.ecommerce.security.SecurityUtil;
 import com.example.ecommerce.service.AddProductService;
@@ -17,15 +18,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.ecommerce.mapper.AddProductMapper.mapToAddProductDto;
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.round;
 
 @Controller
 public class MyCartController {
-    ProductService productService;
-    CartService cartService;
-    UserRepository userRepository;
-    AddProductService addProductService;
+    private final ProductService productService;
+    private final CartService cartService;
+    private final UserRepository userRepository;
+    private final AddProductService addProductService;
 
     public MyCartController(ProductService productService, UserRepository userRepository, CartService cartService, AddProductService addProductService) {
         this.productService = productService;
@@ -42,7 +42,7 @@ public class MyCartController {
             if(cartDto.getCartProducts().isEmpty()) {
                 model.addAttribute("empty", true);
             } else {
-                List<AddProductDto> addProducts = cartDto.getCartProducts().stream().map((product) -> mapToAddProductDto(product)).collect(Collectors.toList());
+                List<AddProductDto> addProducts = cartDto.getCartProducts().stream().map(AddProductMapper::mapToAddProductDto).collect(Collectors.toList());
                 model.addAttribute("empty", false);
                 model.addAttribute("addProducts", addProducts);
             }

@@ -1,12 +1,10 @@
 package com.example.ecommerce.service.impl;
 
 import com.example.ecommerce.dto.ProductDto;
-import com.example.ecommerce.entity.AddProduct;
 import com.example.ecommerce.entity.Product;
 import com.example.ecommerce.mapper.ProductMapper;
 import com.example.ecommerce.repository.AddProductRepository;
 import com.example.ecommerce.repository.ProductRepository;
-import com.example.ecommerce.service.AddProductService;
 import com.example.ecommerce.service.ProductService;
 import org.springframework.stereotype.Service;
 
@@ -30,30 +28,30 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        return products.stream().map((product) -> mapToProductDto(product)).collect(Collectors.toList());
+        return products.stream().map(ProductMapper::mapToProductDto).collect(Collectors.toList());
     }
 
     @Override
     public void save(ProductDto productDto) {
         LocalDateTime date = LocalDateTime.now();
-        String code = date.getYear() + "" + date.getMonthValue() + "" +date.getDayOfMonth() + "" + date.getHour() + "" + date.getMinute() + "" + date.getSecond();
+        StringBuilder code = new StringBuilder(date.getYear() + "" + date.getMonthValue() + "" + date.getDayOfMonth() + "" + date.getHour() + "" + date.getMinute() + "" + date.getSecond());
         while(code.length() < 14) {
-            code += "0";
+            code.append("0");
         }
-        productDto.setCode(code);
+        productDto.setCode(code.toString());
         productRepository.save(mapToProduct(productDto));
     }
 
     @Override
     public List<ProductDto> findDonuts() {
         List<Product> products = productRepository.findByCategory("Donuts");
-        return products.stream().map((product) -> mapToProductDto(product)).collect(Collectors.toList());
+        return products.stream().map(ProductMapper::mapToProductDto).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDto> findCoffee() {
         List<Product> products = productRepository.findByCategory("Coffee");
-        return products.stream().map((product) -> mapToProductDto(product)).collect(Collectors.toList());
+        return products.stream().map(ProductMapper::mapToProductDto).collect(Collectors.toList());
     }
 
     @Override
@@ -69,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> findDrinks() {
         List<Product> products = productRepository.findByCategory("Drinks");
-        return products.stream().map((product) -> mapToProductDto(product)).collect(Collectors.toList());
+        return products.stream().map(ProductMapper::mapToProductDto).collect(Collectors.toList());
     }
 
     @Override
@@ -77,12 +75,17 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productRepository.findAll();
         return products.stream()
                 .filter(product -> productIds.contains(product.getId()))
-                .map((product) -> mapToProductDto(product))
+                .map(ProductMapper::mapToProductDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ProductDto findByName(String code) {
         return mapToProductDto(productRepository.findByName(code));
+    }
+
+    @Override
+    public List<ProductDto> findBySearch(String code) {
+        return productRepository.findAll().stream().filter(product -> product.getName().contains(code)).map(ProductMapper::mapToProductDto).toList();
     }
 }

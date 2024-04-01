@@ -1,7 +1,7 @@
 package com.example.ecommerce.dto;
 
 import com.example.ecommerce.entity.AddProduct;
-import com.example.ecommerce.entity.Cart;
+import com.example.ecommerce.entity.Status;
 import com.example.ecommerce.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,7 @@ public class OrderDto {
     private Double price;
     private UserEntity createdBy;
     private List<AddProduct> orderProducts = new ArrayList<>();
-    private String status = "NOT DONE";
+    private Status status;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 }

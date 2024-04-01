@@ -31,7 +31,7 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "addproduct_id"))
     private List<AddProduct> orderProducts = new ArrayList<>();
-    private String status = "WAITING...";
+    private Status status;
     @CreationTimestamp
     private LocalDateTime createdOn;
     @UpdateTimestamp

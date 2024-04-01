@@ -22,4 +22,5 @@ public interface ProductService {
     List<ProductDto> getAllById(List<Long> productIds);
 
     ProductDto findByName(String code);
+    List<ProductDto> findBySearch(String code);
 }

@@ -16,21 +16,18 @@
     </div>
     <div sec:authorize="hasRole('ROLE_USER')" class="container emp-profile mt-5">
         <form method="post">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="profile-img">
-                        <img width="150px" src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" alt="">
-                        <div>
-                            <input class="btn btn-outline-dark" type="file" name="file">
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="row">-->
+<!--                <div class="col-md-4">-->
+<!--                    <div class="profile-img">-->
+<!--                        <img width="150px" src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" alt="">-->
+<!--                        <div>-->
+<!--                            <input class="btn btn-outline-dark" type="file" name="file">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="row mt-5">
                 <div class="col-md-6">
-                    <div class="profile-head" th:each="role :${user.roles}">
-                        <p th:text="${role.name}">Role</p>
-                    </div>
                     <div class="tab-content profile-tab" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div class="row">

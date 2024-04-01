@@ -18,6 +18,14 @@
     </div>
         <div class="container px-5 my-5" sec:authorize="hasRole('ROLE_CASHIER')">
             <div class=" px-4 px-lg-5 mt-5">
+                <form class="form-inline" method="POST" action="/product/find">
+                    <div class="input-group">
+                        <input type="search" class="form-control" name="search" placeholder="Search...">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-outline-dark">Search</button>
+                        </div>
+                    </div>
+                </form>
                 <a type="submit" class="btn btn-outline-dark mb-3" th:href="@{/cart}">Cart</a>
                     <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                         <div th:each="product :${products}" class="col mb-5">
