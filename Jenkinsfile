@@ -4,7 +4,7 @@ node {
         checkout scm
     }
     stage('Build image') {
-       app = docker.build("filipetkovski/Ecommerce-Web-App")
+       app = docker.build("filipetkovski/ecommerce-web")
     }
     stage('Push image') {
         docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
